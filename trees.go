@@ -32,6 +32,26 @@ type node struct {
 	right  *node
 }
 
+func (n *node) check() bool {
+	if n.left != nil {
+		if n.left.key.Compare(n.key) >= 0 {
+			return false
+		}
+		if !n.left.check() {
+			return false
+		}
+	}
+	if n.right != nil {
+		if n.key.Compare(n.right.key) >= 0 {
+			return false
+		}
+		if !n.right.check() {
+			return false
+		}
+	}
+	return true
+}
+
 func (n *node) depth() int {
 	var ld, rd int
 	if n.left != nil {
@@ -263,4 +283,12 @@ func (t *Tree) String() string {
 		return "-"
 	}
 	return t.root.str()
+}
+
+// Check verifies that the keys in the tree are ordered correctly.
+func (t *Tree) Check() bool {
+	if t.root == nil {
+		return true
+	}
+	return t.root.check()
 }
