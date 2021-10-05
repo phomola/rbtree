@@ -37,12 +37,18 @@ func (n *node) check() bool {
 		if n.left.key.Compare(n.key) >= 0 {
 			return false
 		}
+		if n.left.parent != n {
+			return false
+		}
 		if !n.left.check() {
 			return false
 		}
 	}
 	if n.right != nil {
 		if n.key.Compare(n.right.key) >= 0 {
+			return false
+		}
+		if n.right.parent != n {
 			return false
 		}
 		if !n.right.check() {
@@ -135,6 +141,15 @@ func (n *node) rotateRight() {
 	n.parent, p.parent = pp, n
 	n.left, n.right = a, p
 	p.left, p.right = b, c
+	if a != nil {
+		a.parent = n
+	}
+	if b != nil {
+		b.parent = p
+	}
+	if c != nil {
+		c.parent = p
+	}
 }
 
 func (n *node) rotateLeft() {
@@ -156,6 +171,15 @@ func (n *node) rotateLeft() {
 	n.parent, p.parent = pp, n
 	n.left, n.right = p, c
 	p.left, p.right = a, b
+	if c != nil {
+		c.parent = n
+	}
+	if a != nil {
+		a.parent = p
+	}
+	if b != nil {
+		b.parent = p
+	}
 }
 
 func (n *node) rotate() {
