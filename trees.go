@@ -84,6 +84,18 @@ func (n *node) size() int {
 	return r
 }
 
+func (n *node) keys() []Comparable {
+	var ks []Comparable
+	if n.left != nil {
+		ks = n.left.keys()
+	}
+	ks = append(ks, n.key)
+	if n.right != nil {
+		ks = append(ks, n.right.keys()...)
+	}
+	return ks
+}
+
 func (n *node) str() string {
 	var s string
 	if n.left != nil {
@@ -263,6 +275,14 @@ func (t *Tree) Size() int {
 		return 0
 	}
 	return t.root.size()
+}
+
+// Keys returns the keys of the items in the tree.
+func (t *Tree) Keys() []Comparable {
+	if t.root == nil {
+		return nil
+	}
+	return t.root.keys()
 }
 
 // Insert inserts a new key-value pair into the tree or replaces the value for an existing key.
